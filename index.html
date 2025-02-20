@@ -5,6 +5,7 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>steen.cc</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="icon" type="image/png" href="/favicon.png">
     <script></script>
     <style>
         body {
@@ -16,32 +17,75 @@
             text-align: center;
         }
 
+        footer {
+            margin-bottom: 20px;
+        }
+
         .content {
-            width: 20%;
+            width: 25%;
             margin: 0px auto 40px auto;
             text-align: left;
+        }
+
+        .content img {
+            margin-top: 20px;
+            margin-bottom: -20px;
         }
 
         .content h2, .content p {
             margin-top: 10px;
             margin-bottom: 10px;
         }
+
+
+        #about {
+            padding: 0;
+            margin: 0;
+        }
+
+        #about p {
+            margin: 0px;
+        }
+
+        #links {
+            padding-bottom: 10px;
+        }
         
         #links a {
             margin-right: 5px;
         }
+        
+        @media (max-width: 1200px) {
+            .content {
+                width: 80%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .content {
+                width: 90%;
+            }
+        }
+
     </style>
 </head>
 <body>
     <h1>steen.cc</h1>
     <hr>
     <div class="content">
+        <img src="me_cropped.jpeg">
+    </div>
+    <div class="content">
         <h2>About me</h2>
 
         <p>Developer, grime DJ/producer, music listener, in-house child caretaker, console gamer, coffee drinker</p>
-        <p style="margin-bottom: 0px;">Location: Oslo</p>
-        <p style="margin-top: 0px;">Born: 1990</p>
-        <p><a href="mailto:lol@youwish.com">Email me</a></p>
+        <div id="about">
+            <p>Name: Espen Steen</p>
+            <p >Location: Oslo</p>
+            <p >Born: 1990</p>
+        </div>
+        <p><a href="mailto:privacy.sierra806@passmail.net" title="Privacy email address that will be forwarded to me.">Email me</a></p>
+
     </div>
     <div class="content">
         <h2>Professional skills</h2>
@@ -69,8 +113,6 @@
         <a href="https://soundcloud.com/dj-shokk">Soundcloud</a>
         <a href="https://open.spotify.com/artist/6rnlr6e1aZZPTEfZYFied8">Spotify</a>
     </div>
-    <br>
-    <br>
     <footer>
         <marquee>2025 Espen Steen</marquee>   
     </footer>     
