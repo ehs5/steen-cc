@@ -109,3 +109,27 @@ test('sets the tab title and meta description', async ({ page }) => {
 		"Hi, I'm Espen. I'm a developer from Oslo."
 	);
 });
+
+test('has no horizontal overflow at 375px width', async ({ page }) => {
+	await page.setViewportSize({ width: 375, height: 812 });
+
+	const scrollWidth: number = await page.evaluate(() => document.documentElement.scrollWidth);
+	expect(scrollWidth).toBeLessThanOrEqual(375);
+});
+
+test('serves fonts from the site itself', async ({ page }) => {
+	const fontUrls: string[] = [];
+	page.on('request', (request) => {
+		if (request.resourceType() === 'font') fontUrls.push(request.url());
+	});
+
+	await page.reload();
+	await page.evaluate(() => document.fonts.ready);
+
+	const siteOrigin: string = new URL(page.url()).origin;
+
+	expect(fontUrls.length).toBeGreaterThan(0);
+	for (const url of fontUrls) {
+		expect(new URL(url).origin).toBe(siteOrigin);
+	}
+});
