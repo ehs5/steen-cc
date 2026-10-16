@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '@fontsource-variable/familjen-grotesk';
 	import fontUrl from '@fontsource-variable/familjen-grotesk/files/familjen-grotesk-latin-wght-normal.woff2?url';
+	import { resolve } from '$app/paths';
 	import { onMount } from 'svelte';
 	import type { Content } from '#lib/content.ts';
 
@@ -10,6 +11,12 @@
 
 	// The page is prerendered, so refresh the year in the browser to keep it current between builds.
 	let year = $state(new Date().getFullYear());
+
+	/** Takes the logo back to the top of this same page, leaving the chosen Design and address as they are. */
+	function scrollToTop(event: MouseEvent) {
+		event.preventDefault();
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+	}
 
 	onMount(() => {
 		year = new Date().getFullYear();
@@ -24,7 +31,7 @@
 <div class="klein">
 	<div class="page">
 		<header>
-			<span>{content.site}</span>
+			<a class="site" href={resolve('/')} onclick={scrollToTop}>{content.site}</a>
 			<nav>
 				<a href="#projects">{content.labels.projects}</a>
 				<a href="mailto:{content.email}">{content.labels.email}</a>
@@ -95,7 +102,7 @@
 		--line: rgb(255 255 255 / 0.35);
 
 		min-height: 100vh;
-		padding: 0 16px 64px;
+		padding: 0 clamp(16px, 4vw, 40px) 64px;
 		background: #1534b8;
 		color: #fff;
 		font-family: 'Familjen Grotesk Variable', sans-serif;
@@ -358,5 +365,9 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: 24px;
+	}
+
+	.site {
+		border-bottom: 0;
 	}
 </style>

@@ -24,8 +24,8 @@ export const designSlots: DesignSlot[] = [
 		id: 'footnotes',
 		name: 'Footnotes',
 		component: Footnotes,
-		text: '#2a2620',
-		background: '#f4efe6'
+		text: '#e8e1d4',
+		background: '#141311'
 	}
 ];
 

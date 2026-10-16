@@ -3,7 +3,7 @@ import { expect, test, type Page } from '@playwright/test';
 const kleinBackground = 'rgb(21, 52, 184)';
 const white = 'rgb(255, 255, 255)';
 const popBackground = 'rgb(236, 231, 222)';
-const footnotesBackground = 'rgb(244, 239, 230)';
+const footnotesBackground = 'rgb(20, 19, 17)';
 
 /** Asserts that Klein is the Design on screen. */
 async function expectKlein(page: Page) {
@@ -185,7 +185,7 @@ test.describe('Switcher', () => {
 
 		const switcher = page.getByRole('group', { name: 'Designs' });
 		await expect(switcher).toHaveCSS('background-color', footnotesBackground);
-		await expect(switcher).toHaveCSS('color', 'rgb(42, 38, 32)');
+		await expect(switcher).toHaveCSS('color', 'rgb(232, 225, 212)');
 	});
 });
 

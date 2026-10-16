@@ -3,6 +3,7 @@
 	import '@fontsource-variable/space-grotesk';
 	import archivoUrl from '@fontsource/archivo-black/files/archivo-black-latin-400-normal.woff2?url';
 	import spaceGroteskUrl from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
+	import { resolve } from '$app/paths';
 	import { onMount } from 'svelte';
 	import type { Content } from '#lib/content.ts';
 
@@ -22,6 +23,12 @@
 	// The page is prerendered, so refresh the year in the browser to keep it current between builds.
 	let year = $state(new Date().getFullYear());
 
+	/** Takes the logo back to the top of this same page, leaving the chosen Design and address as they are. */
+	function scrollToTop(event: MouseEvent) {
+		event.preventDefault();
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+	}
+
 	onMount(() => {
 		year = new Date().getFullYear();
 	});
@@ -36,7 +43,7 @@
 <div class="pop">
 	<div class="page">
 		<header>
-			<span class="site">{content.site}</span>
+			<a class="site" href={resolve('/')} onclick={scrollToTop}>{content.site}</a>
 			<nav>
 				<a class="button" href="#pop-projects">{content.labels.projects}</a>
 				<a class="button email" href="mailto:{content.email}">{content.labels.email}</a>
@@ -122,7 +129,7 @@
 
 	.pop {
 		min-height: 100vh;
-		padding: 0 16px 64px;
+		padding: 0 clamp(16px, 4vw, 40px) 64px;
 		background: #ece7de;
 		background-image: radial-gradient(rgb(30 30 30 / 0.13) 1.2px, transparent 1.2px);
 		background-size: 22px 22px;
@@ -164,6 +171,7 @@
 	}
 
 	.site {
+		text-decoration: none;
 		font-family: 'Archivo Black', sans-serif;
 		font-size: 22px;
 		background: #1e1e1e;
@@ -215,7 +223,7 @@
 	}
 
 	.title {
-		flex: 1 1 520px;
+		flex: 1 1 300px;
 		display: flex;
 		flex-direction: column;
 		gap: 24px;
@@ -263,8 +271,8 @@
 	}
 
 	.frame {
-		width: 280px;
-		height: 296px;
+		width: min(280px, calc(100vw - 72px));
+		aspect-ratio: 280 / 296;
 		background: #a9c8ec;
 		border: 4px solid #1e1e1e;
 		border-radius: 24px;
@@ -315,7 +323,7 @@
 	}
 
 	.projects {
-		margin-top: 64px;
+		margin-top: 24px;
 		display: flex;
 		flex-direction: column;
 		gap: 24px;

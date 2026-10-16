@@ -69,7 +69,7 @@ export const content: Content = {
 			name: 'Rigg',
 			url: 'https://github.com/ehs5/rigg',
 			kind: 'CLI',
-			description: 'Creates Node.js TypeScript projects using a modern toolchain.'
+			description: 'Scaffolds Node.js TypeScript projects using a modern toolchain.'
 		},
 		{
 			name: 'CRMScript Fetcher',
