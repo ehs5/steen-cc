@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { selectDesign } from './designSelection.ts';
+import type { DesignSelection } from './designSelection.ts';
 
 const builtIds: string[] = ['klein', 'pop'];
 const defaultId = 'klein';
@@ -71,7 +72,7 @@ describe('selectDesign', () => {
 	});
 
 	test('keeps the path, other parameters and the hash in the canonical URL', () => {
-		const selection = selectDesign(
+		const selection: DesignSelection = selectDesign(
 			`${site}/?ref=gh&design=nope#projects`,
 			'pop',
 			builtIds,

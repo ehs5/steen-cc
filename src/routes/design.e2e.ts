@@ -44,7 +44,7 @@ test('an unknown design parameter falls back to Klein and is removed', async ({ 
 test('a design parameter becomes the stored choice', async ({ page }) => {
 	await page.goto('/?design=klein');
 
-	const stored = await page.evaluate(() => localStorage.getItem('design'));
+	const stored: string | null = await page.evaluate(() => localStorage.getItem('design'));
 	expect(stored).toBe('klein');
 });
 

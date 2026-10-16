@@ -1,4 +1,5 @@
 import { selectDesign } from './designSelection.ts';
+import type { DesignSelection } from './designSelection.ts';
 import { builtDesigns, builtDesignIds, defaultDesignId, designStorageKey } from './registry.ts';
 
 /**
@@ -18,7 +19,7 @@ function applyDesignSelection(
 		// blocked storage behaves like an empty one
 	}
 
-	const selection = select(location.href, storedId, builtIds, defaultId);
+	const selection: DesignSelection = select(location.href, storedId, builtIds, defaultId);
 	document.documentElement.dataset.design = selection.designId;
 
 	if (selection.store) {
