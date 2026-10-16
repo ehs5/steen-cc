@@ -3,6 +3,7 @@ import { expect, test, type Page } from '@playwright/test';
 const kleinBackground = 'rgb(21, 52, 184)';
 const white = 'rgb(255, 255, 255)';
 const popBackground = 'rgb(236, 231, 222)';
+const footnotesBackground = 'rgb(244, 239, 230)';
 
 /** Asserts that Klein is the Design on screen. */
 async function expectKlein(page: Page) {
@@ -15,6 +16,13 @@ async function expectPop(page: Page) {
 	await expect(page.locator('html')).toHaveAttribute('data-design', 'pop');
 	await expect(page.getByRole('heading', { level: 1, name: 'Espen Steen' })).toBeVisible();
 	await expect(page.locator('body')).toHaveCSS('background-color', popBackground);
+}
+
+/** Asserts that Footnotes is the Design on screen. */
+async function expectFootnotes(page: Page) {
+	await expect(page.locator('html')).toHaveAttribute('data-design', 'footnotes');
+	await expect(page.getByRole('heading', { level: 1, name: 'Espen Steen' })).toBeVisible();
+	await expect(page.locator('body')).toHaveCSS('background-color', footnotesBackground);
 }
 
 /** Returns the path, query and hash currently in the address bar. */
@@ -96,7 +104,7 @@ test.describe('Switcher', () => {
 		await expect(segments).toHaveText(['1', '2', '3']);
 		await expect(segments.nth(0)).toHaveAccessibleName('Klein');
 		await expect(segments.nth(1)).toHaveAccessibleName('Neo-brutal Pop');
-		await expect(segments.nth(2)).toHaveAccessibleName('Pattern in type');
+		await expect(segments.nth(2)).toHaveAccessibleName('Footnotes');
 		await expect(segments.nth(0)).toHaveAttribute('title', 'Klein');
 	});
 
@@ -156,13 +164,28 @@ test.describe('Switcher', () => {
 		await expect(switcher).toHaveCSS('color', 'rgb(30, 30, 30)');
 	});
 
-	test('segment 3 is inert', async ({ page }) => {
-		const segment = page.getByRole('button', { name: 'Pattern in type' });
-		await expect(segment).toHaveAttribute('aria-disabled', 'true');
+	test('segment 3 switches to Footnotes and remembers it', async ({ page }) => {
+		const footnotes = page.getByRole('button', { name: 'Footnotes' });
+		await footnotes.click();
 
-		await segment.click({ force: true });
-		await expectKlein(page);
-		expect(getAddress(page)).toBe('/');
+		await expectFootnotes(page);
+		await expect(footnotes).toHaveAttribute('aria-pressed', 'true');
+		await expect.poll(() => getAddress(page)).toBe('/?design=footnotes');
+
+		const stored: string | null = await page.evaluate(() => localStorage.getItem('design'));
+		expect(stored).toBe('footnotes');
+
+		await page.getByRole('button', { name: 'Neo-brutal Pop' }).click();
+		await expectPop(page);
+		await expect.poll(() => getAddress(page)).toBe('/?design=pop');
+	});
+
+	test('takes the colours of Footnotes', async ({ page }) => {
+		await page.getByRole('button', { name: 'Footnotes' }).click();
+
+		const switcher = page.getByRole('group', { name: 'Designs' });
+		await expect(switcher).toHaveCSS('background-color', footnotesBackground);
+		await expect(switcher).toHaveCSS('color', 'rgb(42, 38, 32)');
 	});
 });
 
@@ -206,6 +229,25 @@ test.describe('no flash', () => {
 
 		await expectPop(page);
 		expect(getAddress(page)).toBe('/?design=pop');
+	});
+
+	test('shows ?design=footnotes before the app loads', async ({ page }) => {
+		await blockAppScripts(page);
+		await page.goto('/?design=footnotes');
+
+		await expectFootnotes(page);
+		expect(getAddress(page)).toBe('/?design=footnotes');
+	});
+
+	test('shows a stored Footnotes before the app loads', async ({ page }) => {
+		await page.goto('/');
+		await page.evaluate(() => localStorage.setItem('design', 'footnotes'));
+
+		await blockAppScripts(page);
+		await page.reload();
+
+		await expectFootnotes(page);
+		expect(getAddress(page)).toBe('/?design=footnotes');
 	});
 
 	test('canonicalises a design parameter before the app loads', async ({ page }) => {

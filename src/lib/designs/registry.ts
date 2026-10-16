@@ -1,6 +1,7 @@
 import type { Component } from 'svelte';
 import type { Content } from '#lib/content.ts';
 import Klein from './Klein.svelte';
+import Footnotes from './Footnotes.svelte';
 import Pop from './Pop.svelte';
 
 export type DesignProps = { content: Content; aboutHtml: string };
@@ -19,7 +20,13 @@ export type BuiltDesign = DesignSlot & { component: Component<DesignProps> };
 export const designSlots: DesignSlot[] = [
 	{ id: 'klein', name: 'Klein', component: Klein, text: '#fff', background: '#1534b8' },
 	{ id: 'pop', name: 'Neo-brutal Pop', component: Pop, text: '#1e1e1e', background: '#ece7de' },
-	{ id: 'pattern', name: 'Pattern in type', component: null, text: '', background: '' }
+	{
+		id: 'footnotes',
+		name: 'Footnotes',
+		component: Footnotes,
+		text: '#2a2620',
+		background: '#f4efe6'
+	}
 ];
 
 export const defaultDesignId = 'klein';

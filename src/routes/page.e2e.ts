@@ -8,7 +8,8 @@ type ExpectedProject = { name: string; kind: string; status: string; url: string
 // Every built Design must pass the same content checks; add a Design here once it is built.
 const designs: BuiltDesign[] = [
 	{ id: 'klein', path: '/' },
-	{ id: 'pop', path: '/?design=pop' }
+	{ id: 'pop', path: '/?design=pop' },
+	{ id: 'footnotes', path: '/?design=footnotes' }
 ];
 
 const projects: ExpectedProject[] = [
@@ -38,6 +39,23 @@ function getAboutParagraphs(): string[] {
 	return paragraphs.map((paragraph) => paragraph.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1'));
 }
 
+/** Escapes the text for use inside a regular expression. */
+function escapeRegExp(text: string): string {
+	return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/** Returns a matcher for the whole paragraph that also accepts a footnote number after each Project name. */
+function matchParagraph(paragraph: string): RegExp {
+	let pattern: string = escapeRegExp(paragraph);
+
+	for (const project of projects) {
+		const name: string = escapeRegExp(project.name);
+		pattern = pattern.replaceAll(name, `${name}\\d*`);
+	}
+
+	return new RegExp(`^${pattern}$`);
+}
+
 /** Returns the items of the Projects list that the Projects jump link points to. */
 async function getProjectItems(page: Page): Promise<Locator> {
 	const jumpLink: Locator = page.getByRole('link', { name: 'Projects', exact: true });
@@ -63,7 +81,7 @@ for (const design of designs) {
 		test('shows every About text paragraph', async ({ page }) => {
 			for (const paragraph of getAboutParagraphs()) {
 				await expect(
-					page.getByText(paragraph, { exact: true }).filter({ visible: true })
+					page.getByText(matchParagraph(paragraph)).filter({ visible: true })
 				).toBeVisible();
 			}
 		});
@@ -165,3 +183,45 @@ for (const design of designs) {
 		});
 	});
 }
+
+test.describe('footnotes numbering', () => {
+	// CRMScript Fetcher is the one Project the About text doesn't mention
+	const mentioned: ExpectedProject[] = projects.filter(
+		(project) => project.name !== 'CRMScript Fetcher'
+	);
+
+	test.beforeEach(async ({ page }) => {
+		await page.goto('/?design=footnotes');
+	});
+
+	test('puts a number after each mentioned Project name that links to its note', async ({
+		page
+	}) => {
+		const paragraph = page
+			.getByText('Outside of my job', { exact: false })
+			.filter({ visible: true });
+
+		for (const [i, project] of mentioned.entries()) {
+			const number = String(i + 1);
+			await expect(paragraph).toContainText(`${project.name}${number}`);
+
+			const mark: Locator = paragraph.getByRole('link', { name: number, exact: true });
+			const target: string = (await mark.getAttribute('href')) ?? '';
+			expect(target).toMatch(/^#.+/);
+			await expect(page.locator(target)).toContainText(project.name);
+		}
+	});
+
+	test('gives every Project a numbered note, mentioned or not', async ({ page }) => {
+		const items: Locator = await getProjectItems(page);
+		await expect(items).toHaveCount(projects.length);
+
+		for (const [i, project] of projects.entries()) {
+			await expect(items.nth(i)).toContainText(`${i + 1}`);
+			await expect(items.nth(i)).toContainText(project.name);
+		}
+
+		const unmentionedNumber = String(projects.length);
+		await expect(page.getByRole('link', { name: unmentionedNumber, exact: true })).toHaveCount(0);
+	});
+});
