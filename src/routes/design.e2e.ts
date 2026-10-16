@@ -2,11 +2,19 @@ import { expect, test, type Page } from '@playwright/test';
 
 const kleinBackground = 'rgb(21, 52, 184)';
 const white = 'rgb(255, 255, 255)';
+const popBackground = 'rgb(236, 231, 222)';
 
 /** Asserts that Klein is the Design on screen. */
 async function expectKlein(page: Page) {
 	await expect(page.getByRole('heading', { level: 1, name: 'Espen Steen' })).toBeVisible();
 	await expect(page.locator('body')).toHaveCSS('background-color', kleinBackground);
+}
+
+/** Asserts that Neo-brutal Pop is the Design on screen. */
+async function expectPop(page: Page) {
+	await expect(page.locator('html')).toHaveAttribute('data-design', 'pop');
+	await expect(page.getByRole('heading', { level: 1, name: 'Espen Steen' })).toBeVisible();
+	await expect(page.locator('body')).toHaveCSS('background-color', popBackground);
 }
 
 /** Returns the path, query and hash currently in the address bar. */
@@ -121,15 +129,40 @@ test.describe('Switcher', () => {
 		expect(getAddress(page)).toBe('/');
 	});
 
-	test('segments 2 and 3 are inert', async ({ page }) => {
-		for (const name of ['Neo-brutal Pop', 'Pattern in type']) {
-			const segment = page.getByRole('button', { name });
-			await expect(segment).toHaveAttribute('aria-disabled', 'true');
+	test('segment 2 switches to Neo-brutal Pop and remembers it', async ({ page }) => {
+		const pop = page.getByRole('button', { name: 'Neo-brutal Pop' });
+		await pop.click();
 
-			await segment.click({ force: true });
-			await expectKlein(page);
-			expect(getAddress(page)).toBe('/');
-		}
+		await expectPop(page);
+		await expect(pop).toHaveAttribute('aria-pressed', 'true');
+		await expect.poll(() => getAddress(page)).toBe('/?design=pop');
+
+		const stored: string | null = await page.evaluate(() => localStorage.getItem('design'));
+		expect(stored).toBe('pop');
+
+		await page
+			.getByRole('group', { name: 'Designs' })
+			.getByRole('button', { name: 'Klein' })
+			.click();
+		await expectKlein(page);
+		await expect.poll(() => getAddress(page)).toBe('/');
+	});
+
+	test('takes the colours of Neo-brutal Pop', async ({ page }) => {
+		await page.getByRole('button', { name: 'Neo-brutal Pop' }).click();
+
+		const switcher = page.getByRole('group', { name: 'Designs' });
+		await expect(switcher).toHaveCSS('background-color', popBackground);
+		await expect(switcher).toHaveCSS('color', 'rgb(30, 30, 30)');
+	});
+
+	test('segment 3 is inert', async ({ page }) => {
+		const segment = page.getByRole('button', { name: 'Pattern in type' });
+		await expect(segment).toHaveAttribute('aria-disabled', 'true');
+
+		await segment.click({ force: true });
+		await expectKlein(page);
+		expect(getAddress(page)).toBe('/');
 	});
 });
 
@@ -154,6 +187,25 @@ test.describe('no flash', () => {
 
 		await expectKlein(page);
 		await expect(page.locator('html')).toHaveAttribute('data-design', 'klein');
+	});
+
+	test('shows ?design=pop before the app loads', async ({ page }) => {
+		await blockAppScripts(page);
+		await page.goto('/?design=pop');
+
+		await expectPop(page);
+		expect(getAddress(page)).toBe('/?design=pop');
+	});
+
+	test('shows a stored Neo-brutal Pop before the app loads', async ({ page }) => {
+		await page.goto('/');
+		await page.evaluate(() => localStorage.setItem('design', 'pop'));
+
+		await blockAppScripts(page);
+		await page.reload();
+
+		await expectPop(page);
+		expect(getAddress(page)).toBe('/?design=pop');
 	});
 
 	test('canonicalises a design parameter before the app loads', async ({ page }) => {
