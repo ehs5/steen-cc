@@ -26,6 +26,10 @@ A short label for a project that isn't fully available yet, such as "Under devel
 One complete look for the site: layout, typography and colour. Every design renders the same content.
 _Avoid_: Theme, skin, template
 
+**Draft**:
+The approved mockup a Design is built from. A Design should match its Draft visually, changed only where the Content differs.
+_Avoid_: Mockup, artifact, prototype
+
 **Default design**:
 The design shown to a visitor who hasn't chosen one.
 

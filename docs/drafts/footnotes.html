@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Draft: Footnotes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.pr a{color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:#C9BFAE;transition:color .2s ease,text-decoration-color .2s ease}
+.pr a:hover{color:#8C2F39;text-decoration-color:#8C2F39}
+.pr p{margin:0}
+.pr sup{font-size:0.62em;line-height:0;margin-left:1px}
+.pr sup a{text-decoration:none;color:#8C2F39}
+.pr .sc{font-variant:small-caps;letter-spacing:0.04em}
+.pr .orn{text-align:center;color:#A39887;margin:1.2em 0}
+.mg{display:grid;grid-template-columns:1fr 580px 1fr;column-gap:32px}
+.mg>.c{grid-column:2}
+.mg>.m{grid-column:1;text-align:right;font-style:italic;font-size:17px;line-height:1.6;padding-top:0.15em}
+@media (max-width: 1000px){.mg{grid-template-columns:1fr;max-width:580px;margin:0 auto}.mg>.c,.mg>.m{grid-column:1}.mg>.m{text-align:left;padding-top:0.8em}}
+
+</style>
+</head>
+<body>
+<div class="pr" style="min-height: 1400px; background: #F4EFE6; color: #2A2620; font-family: 'EB Garamond', serif; font-size: 21px; line-height: 1.6; padding: 0 16px 80px">
+<div style="max-width: 580px; margin: 0 auto; padding-top: 96px; display: flex; flex-direction: column; gap: 1.1em">
+<img src="./photo.jpeg" alt="Espen Steen" style="width: 72px; height: 76px; object-fit: cover; border-radius: 2px; margin-bottom: 1em; filter: grayscale(0.3)">
+<p>Hi, I’m Espen. I’m a developer in Oslo and I lead CRM development at Cloud Connection.</p>
+<p>On the side I run <a href="https://plainkey.io">PlainKey</a>, which does passkey authentication for European apps. I like building the tools other developers end up using.</p>
+<p>When I’m not coding I play and produce grime, which you can hear on <a href="https://soundcloud.com/dj-shokk">SoundCloud</a> and <a href="https://open.spotify.com/artist/6rnlr6e1aZZPTEfZYFied8">Spotify</a>.</p>
+<p>Things I’ve made: <a href="https://plainkey.io">PlainKey</a><sup><a href="#n1">1</a></sup>, <a href="#">coastty</a><sup><a href="#n2">2</a></sup>, <a href="#">orkester</a><sup><a href="#n3">3</a></sup>, <a href="https://github.com/ehs5/crmscript_fetcher">crmscript_fetcher</a><sup><a href="#n4">4</a></sup> and <a href="https://www.npmjs.com/package/create-rigg">create-rigg</a><sup><a href="#n5">5</a></sup>.</p>
+<p>Say hi by <a href="mailto:privacy.sierra806@passmail.net">email</a>, or find my code on <a href="https://github.com/ehs5">GitHub</a>.</p>
+<p style="margin-top: 2em; color: #7A7266; font-style: italic">Espen Steen, 2026</p>
+<div style="margin-top: 3em; width: 120px; border-top: 1px solid #C9BFAE"></div>
+<ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0.6em; font-size: 17px; line-height: 1.55; color: #4A443B">
+<li id="n1" style="display: flex; gap: 12px"><span style="flex: 0 0 14px; color: #8C2F39">1</span><span><i>PlainKey.</i> Passkey authentication for the web. Based in Europe.</span></li>
+<li id="n2" style="display: flex; gap: 12px"><span style="flex: 0 0 14px; color: #8C2F39">2</span><span><i>coastty.</i> A macOS terminal for coding agents, built on Ghostty. Shows what every agent is doing and keeps sessions running after you quit.</span></li>
+<li id="n3" style="display: flex; gap: 12px"><span style="flex: 0 0 14px; color: #8C2F39">3</span><span><i>orkester.</i> A runner for agent flows. A flow is JSON describing steps: LLM agents, code and branches.</span></li>
+<li id="n4" style="display: flex; gap: 12px"><span style="flex: 0 0 14px; color: #8C2F39">4</span><span><i>crmscript_fetcher.</i> Fetches CRMScripts and other customizations from SuperOffice and saves them as files and folders.</span></li>
+<li id="n5" style="display: flex; gap: 12px"><span style="flex: 0 0 14px; color: #8C2F39">5</span><span><i>create-rigg.</i> Creates Node.js TypeScript projects using the Vite+ toolchain.</span></li>
+</ol>
+</div>
+</div>
+</body>
+</html>
