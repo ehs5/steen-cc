@@ -113,10 +113,12 @@ for (const design of designs) {
 		});
 
 		test('shows the email link and the four links', async ({ page }) => {
-			await expect(page.getByRole('link', { name: 'Email me' })).toHaveAttribute(
-				'href',
-				'mailto:privacy.sierra806@passmail.net'
-			);
+			// A Design may repeat the email link (e.g. header and footer); every one must point to the address.
+			const emailLinks = page.getByRole('link', { name: 'Email me' });
+			await expect(emailLinks.first()).toBeVisible();
+			for (const emailLink of await emailLinks.all()) {
+				await expect(emailLink).toHaveAttribute('href', 'mailto:privacy.sierra806@passmail.net');
+			}
 
 			const footer = page.locator('footer').filter({ visible: true });
 			for (const link of links) {

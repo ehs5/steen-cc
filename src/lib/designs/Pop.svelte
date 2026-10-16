@@ -4,18 +4,11 @@
 	import archivoUrl from '@fontsource/archivo-black/files/archivo-black-latin-400-normal.woff2?url';
 	import spaceGroteskUrl from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
 	import { onMount } from 'svelte';
-	import type { Content, Link } from '#lib/content.ts';
+	import type { Content } from '#lib/content.ts';
 
 	type Props = { content: Content; aboutHtml: string };
 
 	let { content, aboutHtml }: Props = $props();
-
-	// The Draft's header buttons carry these two links; the footer carries all of them.
-	const headerLinkLabels: string[] = ['GitHub', 'SoundCloud'];
-
-	const headerLinks: Link[] = $derived(
-		content.links.filter((link) => headerLinkLabels.includes(link.label))
-	);
 
 	// The Draft sets the last name apart in the highlighted block.
 	const firstName: string = $derived(content.name.split(' ')[0]);
@@ -46,9 +39,6 @@
 			<span class="site">{content.site}</span>
 			<nav>
 				<a class="button" href="#pop-projects">{content.labels.projects}</a>
-				{#each headerLinks as link (link.label)}
-					<a class="button" href={link.url} rel="external">{link.label}</a>
-				{/each}
 				<a class="button email" href="mailto:{content.email}">{content.labels.email}</a>
 			</nav>
 		</header>
@@ -116,7 +106,7 @@
 					<a href={link.url} rel="external">{link.label}</a>
 				{/each}
 			</nav>
-			<span>{year} {content.name}</span>
+			<span>© {year} {content.name}</span>
 		</footer>
 	</div>
 </div>
@@ -195,6 +185,21 @@
 		background: #fbf8f2;
 		border: 3px solid #1e1e1e;
 		border-radius: 10px;
+		transition:
+			transform 0.12s ease,
+			box-shadow 0.12s ease;
+	}
+
+	/* Lifts off the page with a hard shadow, like the cards, and presses back down on click. */
+	.button:hover {
+		opacity: 1;
+		transform: translate(-3px, -3px);
+		box-shadow: 4px 4px 0 #1e1e1e;
+	}
+
+	.button:active {
+		transform: translate(0, 0);
+		box-shadow: 0 0 0 #1e1e1e;
 	}
 
 	.email {
@@ -310,6 +315,7 @@
 	}
 
 	.projects {
+		margin-top: 64px;
 		display: flex;
 		flex-direction: column;
 		gap: 24px;
@@ -411,6 +417,7 @@
 	}
 
 	footer {
+		margin-top: 64px;
 		display: flex;
 		justify-content: space-between;
 		flex-wrap: wrap;
