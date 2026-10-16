@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '@fontsource-variable/familjen-grotesk';
+	import fontUrl from '@fontsource-variable/familjen-grotesk/files/familjen-grotesk-latin-wght-normal.woff2?url';
 	import { onMount } from 'svelte';
 	import type { Content } from '#lib/content.ts';
 
@@ -15,62 +16,72 @@
 	});
 </script>
 
+<svelte:head>
+	<!-- Fetched alongside the CSS so the text is drawn in Familjen Grotesk from the first frame instead of swapping in. -->
+	<link rel="preload" href={fontUrl} as="font" type="font/woff2" crossorigin="anonymous" />
+</svelte:head>
+
 <div class="klein">
-	<header>
-		<span class="site">{content.site}</span>
-		<nav>
-			<a href="#projects">{content.labels.projects}</a>
-			<a href="mailto:{content.email}">{content.labels.email}</a>
-		</nav>
-	</header>
+	<div class="page">
+		<header>
+			<span>{content.site}</span>
+			<nav>
+				<a href="#projects">{content.labels.projects}</a>
+				<a href="mailto:{content.email}">{content.labels.email}</a>
+			</nav>
+		</header>
 
-	<main>
-		<section class="intro">
-			<div>
-				<h1>{content.name}</h1>
-				<p class="meta">{content.location} · Born {content.born}</p>
-			</div>
-			<img src={content.photo} alt={content.photoAlt} width="558" height="585" />
-		</section>
+		<main>
+			<section class="intro">
+				<div class="title">
+					<h1>{content.name}</h1>
+					<p class="meta">
+						{content.labels.location}: {content.location}<br />
+						{content.labels.born}: {content.born}
+					</p>
+				</div>
+				<img src={content.photo} alt={content.photoAlt} width="558" height="585" />
+			</section>
 
-		<section class="about">
-			<!-- eslint-disable-next-line svelte/no-at-html-tags -- rendered at build time from our own markdown file -->
-			{@html aboutHtml}
-		</section>
+			<section class="about">
+				<!-- eslint-disable-next-line svelte/no-at-html-tags -- rendered at build time from our own markdown file -->
+				{@html aboutHtml}
+			</section>
 
-		<section id="projects">
-			<h2>{content.labels.projects}</h2>
-			<ul>
-				{#each content.projects as project (project.name)}
-					<li>
-						<div class="project-heading">
+			<section id="projects">
+				<h2>{content.labels.projects}</h2>
+				<ul>
+					{#each content.projects as project (project.name)}
+						<li class:linked={project.url}>
 							{#if project.url}
-								<a class="project-name" href={project.url} rel="external">{project.name}</a>
+								<a class="name" href={project.url} target="_blank" rel="external noopener"
+									>{project.name}</a
+								>
+								<span class="arrow" aria-hidden="true">↗</span>
 							{:else}
-								<span class="project-name">{project.name}</span>
+								<span class="name">{project.name}</span>
 							{/if}
 							<span class="labels">
-								<span>{project.kind}</span>
-								{#if project.status}
-									<span>· {project.status}</span>
-								{/if}
+								{project.kind}{#if project.status}&nbsp;· <span class="status"
+										>{project.status}</span
+									>{/if}
 							</span>
-						</div>
-						<p>{project.description}</p>
-					</li>
+							<p>{project.description}</p>
+						</li>
+					{/each}
+				</ul>
+			</section>
+		</main>
+
+		<footer>
+			<ul>
+				{#each content.links as link (link.label)}
+					<li><a href={link.url} rel="external">{link.label}</a></li>
 				{/each}
 			</ul>
-		</section>
-	</main>
-
-	<footer>
-		<ul>
-			{#each content.links as link (link.label)}
-				<li><a href={link.url} rel="external">{link.label}</a></li>
-			{/each}
-		</ul>
-		<p>© {year}</p>
-	</footer>
+			<span>© {year} {content.name}</span>
+		</footer>
+	</div>
 </div>
 
 <style>
@@ -80,124 +91,151 @@
 	}
 
 	.klein {
-		--rule: 1px solid rgb(255 255 255 / 0.5);
+		--muted: rgb(255 255 255 / 0.88);
+		--line: rgb(255 255 255 / 0.35);
 
-		box-sizing: border-box;
 		min-height: 100vh;
-		max-width: 64rem;
-		margin: 0 auto;
-		padding: 0 clamp(1rem, 5vw, 3rem);
+		padding: 0 16px 64px;
 		background: #1534b8;
 		color: #fff;
-		font-family: 'Familjen Grotesk Variable', system-ui, sans-serif;
-		font-size: 1.125rem;
-		line-height: 1.55;
+		font-family: 'Familjen Grotesk Variable', sans-serif;
+		font-size: 18px;
+		line-height: 1.5;
 		overflow-wrap: break-word;
+	}
+
+	.page {
+		max-width: 1120px;
+		margin: 0 auto;
+		padding-top: 40px;
+		display: flex;
+		flex-direction: column;
+		gap: 96px;
+	}
+
+	main {
+		display: flex;
+		flex-direction: column;
+		gap: 96px;
 	}
 
 	a {
 		color: inherit;
 		text-decoration: none;
-		text-underline-offset: 0.2em;
-		text-decoration-thickness: 1px;
+		border-bottom: 1px solid currentColor;
 	}
 
 	a:hover {
-		text-decoration: underline;
+		opacity: 0.65;
 	}
 
 	header {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.5rem 1.5rem;
+		gap: 16px;
+		align-items: center;
 		justify-content: space-between;
-		padding: 1.5rem 0;
-		border-bottom: var(--rule);
-	}
-
-	.site {
-		font-weight: 600;
+		font-weight: 500;
 	}
 
 	nav {
 		display: flex;
-		gap: 1.5rem;
+		flex-wrap: wrap;
+		gap: 24px;
 	}
 
 	.intro {
-		display: grid;
-		gap: 2rem;
-		align-items: end;
-		padding: clamp(3rem, 10vw, 7rem) 0 clamp(2.5rem, 6vw, 4rem);
-		border-bottom: var(--rule);
+		--title-size: clamp(60px, 10vw, 140px);
+
+		display: flex;
+		flex-wrap: wrap;
+		gap: 40px;
+		align-items: flex-start;
+		justify-content: space-between;
 	}
 
-	@media (min-width: 48rem) {
-		.intro {
-			grid-template-columns: 1fr auto;
-		}
+	.title {
+		flex: 1 1 520px;
+		display: flex;
+		flex-direction: column;
+		gap: 24px;
 	}
 
 	h1 {
-		margin: 0;
-		font-size: clamp(3.25rem, 13vw, 8.5rem);
-		font-weight: 600;
-		line-height: 0.92;
-		letter-spacing: -0.035em;
+		/* Pulls the type in by the E's side bearing so it lines up with the text below. */
+		margin: 0 0 0 -0.063em;
+		font-size: var(--title-size);
+		font-weight: 700;
+		line-height: 0.9;
+		letter-spacing: -0.04em;
 	}
 
 	.meta {
-		margin: 1.25rem 0 0;
-		font-size: 1.25rem;
+		margin: 0;
+		font-size: 16px;
+		line-height: 1.5;
+		color: var(--muted);
 	}
 
+	/* Spans from the top of the capitals to the bottom of the meta lines (cap top sits 0.2em into the line box). */
 	img {
-		display: block;
-		width: 14rem;
-		max-width: 100%;
-		height: auto;
+		flex: 0 0 auto;
+		height: calc(var(--title-size) * 0.7 + 24px + 48px);
+		width: auto;
+		margin-top: calc(var(--title-size) * 0.2);
+		border-radius: 4px;
+		filter: grayscale(1) contrast(1.1);
+		mix-blend-mode: screen;
+	}
+
+	@media (max-width: 760px) {
+		img {
+			height: 180px;
+			margin-top: 0;
+		}
 	}
 
 	.about {
-		max-width: 40rem;
-		padding: clamp(2.5rem, 6vw, 4rem) 0;
-		border-bottom: var(--rule);
+		max-width: 720px;
+		font-size: 20px;
+		line-height: 1.5;
 	}
 
 	.about :global(p) {
-		margin: 0 0 1.25em;
+		margin: 0 0 1em;
 	}
 
 	.about :global(p:first-child) {
-		font-size: 1.5rem;
+		font-size: 26px;
 		line-height: 1.35;
+		letter-spacing: -0.01em;
+	}
+
+	.about :global(a) {
+		color: inherit;
+		text-decoration: none;
+		border-bottom: 1px solid currentColor;
+	}
+
+	.about :global(a:hover) {
+		opacity: 0.65;
 	}
 
 	.about :global(p:last-child) {
 		margin-bottom: 0;
 	}
 
-	.about :global(a) {
-		color: inherit;
-		text-decoration: underline;
-		text-underline-offset: 0.2em;
-		text-decoration-thickness: 1px;
-	}
-
-	.about :global(a:hover) {
-		opacity: 0.7;
-	}
-
 	#projects {
-		padding: clamp(2.5rem, 6vw, 4rem) 0;
+		display: flex;
+		flex-direction: column;
+		gap: 24px;
 	}
 
 	h2 {
-		margin: 0 0 1.5rem;
-		font-size: 1rem;
+		margin: 0;
+		font-size: 16px;
 		font-weight: 500;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
+		color: var(--muted);
 	}
 
 	ul {
@@ -206,55 +244,119 @@
 		list-style: none;
 	}
 
+	#projects ul {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+		gap: 0 48px;
+	}
+
 	#projects li {
-		padding: 1.5rem 0;
-		border-top: var(--rule);
-	}
-
-	#projects li:last-child {
-		border-bottom: var(--rule);
-	}
-
-	.project-heading {
+		position: relative;
 		display: flex;
-		flex-wrap: wrap;
-		gap: 0.25rem 1rem;
-		align-items: baseline;
-		justify-content: space-between;
+		flex-direction: column;
+		gap: 6px;
+		padding: 24px 0;
+		border-top: 1px solid var(--line);
 	}
 
-	.project-name {
-		font-size: clamp(1.5rem, 4vw, 2rem);
-		font-weight: 600;
+	/* On hover a white line draws over the faint top rule: solid for linked Projects, dashed for unlinked. */
+	#projects li::before {
+		content: '';
+		position: absolute;
+		top: -1px;
+		left: 0;
+		right: 0;
+		height: 1px;
+		background: #fff;
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.35s ease;
+	}
+
+	#projects li:not(.linked)::before {
+		background: repeating-linear-gradient(90deg, #fff 0 40px, transparent 40px 72px);
+	}
+
+	#projects li:hover::before {
+		transform: scaleX(1);
+	}
+
+	.status {
+		transition: color 0.2s ease;
+	}
+
+	#projects li:hover .status {
+		color: #fff;
+	}
+
+	/* A linked Project is clickable as a whole card: the name's link stretches over it. */
+	.linked .name {
+		border-bottom: 0;
+	}
+
+	.linked .name:hover {
+		opacity: 1;
+	}
+
+	.linked .name::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+	}
+
+	.linked .name:focus-visible {
+		outline: none;
+	}
+
+	.linked .name:focus-visible::after {
+		outline: 2px solid #fff;
+		outline-offset: 4px;
+	}
+
+	.arrow {
+		position: absolute;
+		top: 28px;
+		right: 0;
+		font-size: 22px;
+		line-height: 1;
+		transition: transform 0.2s ease;
+	}
+
+	.linked:hover .arrow {
+		transform: translate(3px, -3px);
+	}
+
+	.name {
+		align-self: flex-start;
+		font-size: 30px;
+		font-weight: 700;
+		line-height: 1.2;
 		letter-spacing: -0.02em;
 	}
 
 	.labels {
-		font-size: 0.95rem;
-		opacity: 0.8;
+		font-size: 15px;
+		color: var(--muted);
 	}
 
 	#projects p {
-		max-width: 40rem;
-		margin: 0.5rem 0 0;
+		margin: 0;
+		color: var(--muted);
 	}
 
 	footer {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 1rem 2rem;
-		align-items: center;
+		gap: 16px;
 		justify-content: space-between;
-		padding: 2rem 0 2.5rem;
+		padding-top: 20px;
+		border-top: 1px solid var(--line);
+		font-size: 16px;
 	}
 
 	footer ul {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.5rem 1.5rem;
-	}
-
-	footer p {
-		margin: 0;
+		gap: 24px;
 	}
 </style>

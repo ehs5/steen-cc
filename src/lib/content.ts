@@ -26,6 +26,8 @@ export type Content = {
 	labels: {
 		projects: string;
 		email: string;
+		location: string;
+		born: string;
 	};
 };
 
@@ -65,9 +67,9 @@ export const content: Content = {
 		},
 		{
 			name: 'Rigg',
-			url: 'https://www.npmjs.com/package/create-rigg',
+			url: 'https://github.com/ehs5/rigg',
 			kind: 'CLI',
-			description: 'Creates Node.js TypeScript projects using the Vite+ toolchain.'
+			description: 'Creates Node.js TypeScript projects using a modern toolchain.'
 		},
 		{
 			name: 'CRMScript Fetcher',
@@ -79,6 +81,8 @@ export const content: Content = {
 	],
 	labels: {
 		projects: 'Projects',
-		email: 'Email me'
+		email: 'Email me',
+		location: 'Location',
+		born: 'Born'
 	}
 };

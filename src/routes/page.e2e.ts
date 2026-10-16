@@ -7,7 +7,7 @@ const projects: ExpectedProject[] = [
 	{ name: 'PlainKey', kind: 'Company', status: '', url: 'https://plainkey.io' },
 	{ name: 'Coastty', kind: 'macOS app', status: 'Coming soon', url: '' },
 	{ name: 'Orkester', kind: 'Platform', status: 'Under development', url: '' },
-	{ name: 'Rigg', kind: 'CLI', status: '', url: 'https://www.npmjs.com/package/create-rigg' },
+	{ name: 'Rigg', kind: 'CLI', status: '', url: 'https://github.com/ehs5/rigg' },
 	{
 		name: 'CRMScript Fetcher',
 		kind: 'CLI + GUI',
@@ -36,7 +36,8 @@ test.beforeEach(async ({ page }) => {
 
 test('shows the name, location and birth year', async ({ page }) => {
 	await expect(page.getByRole('heading', { level: 1, name: 'Espen Steen' })).toBeVisible();
-	await expect(page.getByText('Oslo · Born 1990')).toBeVisible();
+	await expect(page.getByText('Location: Oslo')).toBeVisible();
+	await expect(page.getByText('Born: 1990')).toBeVisible();
 	await expect(page.getByRole('img', { name: 'Espen Steen' })).toBeVisible();
 });
 
