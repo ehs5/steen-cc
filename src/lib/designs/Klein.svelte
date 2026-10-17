@@ -3,6 +3,7 @@
 	import fontUrl from '@fontsource-variable/familjen-grotesk/files/familjen-grotesk-latin-wght-normal.woff2?url';
 	import { resolve } from '$app/paths';
 	import { onMount } from 'svelte';
+	import ArrowIcon from '#lib/ArrowIcon.svelte';
 	import type { Content } from '#lib/content.ts';
 
 	type Props = { content: Content; aboutHtml: string };
@@ -64,7 +65,7 @@
 								<a class="name" href={project.url} target="_blank" rel="external noopener"
 									>{project.name}</a
 								>
-								<span class="arrow" aria-hidden="true">↗</span>
+								<span class="arrow"><ArrowIcon size="26px" strokeWidth={1.5} /></span>
 							{:else}
 								<span class="name">{project.name}</span>
 							{/if}
@@ -324,8 +325,6 @@
 		position: absolute;
 		top: 28px;
 		right: 0;
-		font-size: 22px;
-		line-height: 1;
 		transition: transform 0.2s ease;
 	}
 

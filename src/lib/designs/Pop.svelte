@@ -5,6 +5,7 @@
 	import spaceGroteskUrl from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
 	import { resolve } from '$app/paths';
 	import { onMount } from 'svelte';
+	import ArrowIcon from '#lib/ArrowIcon.svelte';
 	import type { Content } from '#lib/content.ts';
 
 	type Props = { content: Content; aboutHtml: string };
@@ -86,7 +87,9 @@
 						<li>
 							{#if project.url}
 								<a class="card" href={project.url} target="_blank" rel="external noopener">
-									<span class="name">{project.name}<span aria-hidden="true">↗</span></span>
+									<span class="name"
+										>{project.name}<ArrowIcon size="30px" strokeWidth={1.75} /></span
+									>
 									<span class="labels">
 										<span class="kind">{project.kind}</span>
 										{#if project.status}<span class="status">{project.status}</span>{/if}
