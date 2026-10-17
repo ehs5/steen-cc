@@ -102,4 +102,51 @@
 		outline: 2px solid var(--design-text);
 		outline-offset: 2px;
 	}
+	/*
+	 * Every Design gets the same footprint (three 2.5rem segments in the same corner) but its own look.
+	 * Nothing here changes the size: Neo-brutal Pop thickens its edge with an outline, Footnotes uses hairlines in its rule colour.
+	 */
+	:global(html[data-design='pop']) .switcher {
+		border-radius: 10px;
+		outline: 2px solid #1e1e1e;
+		box-shadow: 6px 6px 0 #1e1e1e;
+		background: #fbf8f2;
+		overflow: hidden;
+	}
+
+	:global(html[data-design='pop']) button {
+		font:
+			700 1rem / 1 'Space Grotesk Variable',
+			sans-serif;
+	}
+
+	:global(html[data-design='pop']) .switcher [data-switcher-segment='pop'] {
+		background: #e8774f;
+		color: #1e1e1e;
+	}
+
+	:global(html[data-design='footnotes']) .switcher {
+		border-color: #4a443c;
+		border-radius: 2px;
+	}
+
+	:global(html[data-design='footnotes']) button {
+		border-color: #4a443c;
+		color: #9a9183;
+		font:
+			400 1.1rem / 1 'EB Garamond Variable',
+			serif;
+	}
+
+	:global(html[data-design='footnotes']) .switcher [data-switcher-segment='footnotes'] {
+		background: none;
+		color: #e8e1d4;
+		text-decoration: underline;
+		text-underline-offset: 4px;
+		text-decoration-thickness: 1px;
+	}
+
+	:global(html[data-design='footnotes']) button:not([aria-disabled='true']):hover {
+		color: #e0727c;
+	}
 </style>

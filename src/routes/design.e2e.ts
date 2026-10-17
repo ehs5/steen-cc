@@ -156,12 +156,26 @@ test.describe('Switcher', () => {
 		await expect.poll(() => getAddress(page)).toBe('/');
 	});
 
-	test('takes the colours of Neo-brutal Pop', async ({ page }) => {
+	test('takes the look of Neo-brutal Pop', async ({ page }) => {
 		await page.getByRole('button', { name: 'Neo-brutal Pop' }).click();
 
 		const switcher = page.getByRole('group', { name: 'Designs' });
-		await expect(switcher).toHaveCSS('background-color', popBackground);
+		await expect(switcher).toHaveCSS('background-color', 'rgb(251, 248, 242)');
 		await expect(switcher).toHaveCSS('color', 'rgb(30, 30, 30)');
+		await expect(page.getByRole('button', { name: 'Neo-brutal Pop' })).toHaveCSS(
+			'background-color',
+			'rgb(232, 119, 79)'
+		);
+	});
+
+	test('has the same size and position in every Design', async ({ page }) => {
+		const switcher = page.getByRole('group', { name: 'Designs' });
+		const klein = await switcher.boundingBox();
+
+		for (const name of ['Neo-brutal Pop', 'Footnotes']) {
+			await switcher.getByRole('button', { name }).click();
+			expect(await switcher.boundingBox()).toEqual(klein);
+		}
 	});
 
 	test('segment 3 switches to Footnotes and remembers it', async ({ page }) => {

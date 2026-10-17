@@ -43,7 +43,7 @@
 			<a class="site" href={resolve('/')} onclick={scrollToTop}>{content.site}</a>
 			<nav>
 				<a href="#footnotes-projects">{content.labels.projects}</a>
-				<a href="mailto:{content.email}">{content.labels.email}</a>
+				<a href="mailto:{content.email}" title={content.labels.emailHint}>{content.labels.email}</a>
 			</nav>
 		</header>
 

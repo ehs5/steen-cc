@@ -46,7 +46,9 @@
 			<a class="site" href={resolve('/')} onclick={scrollToTop}>{content.site}</a>
 			<nav>
 				<a class="button" href="#pop-projects">{content.labels.projects}</a>
-				<a class="button email" href="mailto:{content.email}">{content.labels.email}</a>
+				<a class="button email" href="mailto:{content.email}" title={content.labels.emailHint}
+					>{content.labels.email}</a
+				>
 			</nav>
 		</header>
 

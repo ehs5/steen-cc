@@ -26,6 +26,7 @@ export type Content = {
 	labels: {
 		projects: string;
 		email: string;
+		emailHint: string;
 		location: string;
 		born: string;
 	};
@@ -82,6 +83,7 @@ export const content: Content = {
 	labels: {
 		projects: 'Projects',
 		email: 'Email me',
+		emailHint: 'Privacy email address that will be forwarded to me',
 		location: 'Location',
 		born: 'Born'
 	}
