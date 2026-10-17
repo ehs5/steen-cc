@@ -83,7 +83,7 @@
 		<footer>
 			<ul>
 				{#each content.links as link (link.label)}
-					<li><a href={link.url} rel="external">{link.label}</a></li>
+					<li><a href={link.url} target="_blank" rel="external noopener">{link.label}</a></li>
 				{/each}
 			</ul>
 			<span>© {year} {content.name}</span>

@@ -112,7 +112,7 @@
 		<footer>
 			<nav>
 				{#each content.links as link (link.label)}
-					<a href={link.url} rel="external">{link.label}</a>
+					<a href={link.url} target="_blank" rel="external noopener">{link.label}</a>
 				{/each}
 			</nav>
 			<span>© {year} {content.name}</span>

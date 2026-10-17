@@ -89,8 +89,10 @@
 		<footer>
 			<p class="links">
 				{#each content.links as link, i (link.label)}
-					{#if i > 0}<span aria-hidden="true">·</span>{/if}<a href={link.url} rel="external"
-						>{link.label}</a
+					{#if i > 0}<span aria-hidden="true">·</span>{/if}<a
+						href={link.url}
+						target="_blank"
+						rel="external noopener">{link.label}</a
 					>
 				{/each}
 			</p>
