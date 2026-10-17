@@ -1,0 +1,10 @@
+# Netlify build settings, kept in the repo so they only apply to branches that contain this site.
+# SvelteKit with adapter-static writes the prerendered site to `build`.
+
+[build]
+  command = "pnpm build"
+  publish = "build"
+
+[build.environment]
+  # Vite 8 needs a recent Node; the site was pinned to an older default when it was created.
+  NODE_VERSION = "24"
