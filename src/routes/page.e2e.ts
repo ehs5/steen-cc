@@ -14,7 +14,7 @@ const designs: BuiltDesign[] = [
 
 const projects: ExpectedProject[] = [
 	{ name: 'PlainKey', kind: 'Company', status: '', url: 'https://plainkey.io' },
-	{ name: 'Coastty', kind: 'macOS app', status: 'Coming soon', url: '' },
+	{ name: 'Coastty', kind: 'macOS app', status: '', url: 'https://coastty.dev' },
 	{ name: 'Orkester', kind: 'Platform', status: 'Under development', url: '' },
 	{ name: 'Rigg', kind: 'CLI', status: '', url: 'https://github.com/ehs5/rigg' },
 	{

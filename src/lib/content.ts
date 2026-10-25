@@ -55,8 +55,8 @@ export const content: Content = {
 		},
 		{
 			name: 'Coastty',
+			url: 'https://coastty.dev',
 			kind: 'macOS app',
-			status: 'Coming soon',
 			description:
 				'A macOS terminal for coding agents, built on Ghostty. Shows what every agent is doing and keeps sessions running after you quit.'
 		},
