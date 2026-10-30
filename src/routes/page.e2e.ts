@@ -16,6 +16,12 @@ const projects: ExpectedProject[] = [
 	{ name: 'PlainKey', kind: 'Company', status: '', url: 'https://plainkey.io' },
 	{ name: 'Coastty', kind: 'macOS app', status: '', url: 'https://coastty.dev' },
 	{ name: 'Orkester', kind: 'Platform', status: 'Under development', url: '' },
+	{
+		name: 'Agent Watercooler',
+		kind: 'MCP server',
+		status: '',
+		url: 'https://github.com/ehs5/agent-watercooler'
+	},
 	{ name: 'Rigg', kind: 'CLI', status: '', url: 'https://github.com/ehs5/rigg' },
 	{
 		name: 'CRMScript Fetcher',

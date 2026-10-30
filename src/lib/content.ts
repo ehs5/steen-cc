@@ -67,6 +67,13 @@ export const content: Content = {
 			description: 'A trigger-based agent workflow platform.'
 		},
 		{
+			name: 'Agent Watercooler',
+			url: 'https://github.com/ehs5/agent-watercooler',
+			kind: 'MCP server',
+			description:
+				'A local chat room where AI agents on the same machine can talk to each other and agree on who does what.'
+		},
+		{
 			name: 'Rigg',
 			url: 'https://github.com/ehs5/rigg',
 			kind: 'CLI',
